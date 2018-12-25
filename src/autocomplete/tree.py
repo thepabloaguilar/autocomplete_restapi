@@ -20,14 +20,15 @@ class TernaryTree:
             combinations, after that, will append the `word` as prefix in
             each combination found.
         '''
-        node = self.__get_node(self.root, word)
+        node = self.__get_node(self.root, word) if word else None
         if node:
             default = []
             if node.is_end_of_string:
                 default.append(word)
             
             if node.has_child():
-                combinations = self.__get_combinations_from_node(node.equal)
+                combinations = self.__get_combinations_from_node(
+                                    node.equal, prefix='', words=[''])
                 return default + [word + item for item in combinations]
             
             return default
@@ -105,3 +106,6 @@ class TernaryTree:
             
             if not is_end:
                 self.__insert(node.right, word)
+    
+    def __call__(self, word):
+        return self.search(word)
