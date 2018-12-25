@@ -44,9 +44,9 @@ class TernaryTree:
             if len(word) == 1:
                 return node
             return self.__get_node(node.equal, word[1:])
-        elif node.character > word[0]:
+        elif node.character > word[0] and node.left:
             return self.__get_node(node.left, word)
-        elif node.character < word[0]:
+        elif node.character < word[0] and node.right:
             return self.__get_node(node.right, word)
         return None
     
