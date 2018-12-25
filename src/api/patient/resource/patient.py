@@ -1,16 +1,16 @@
 from flask import current_app
 from flask_restful import Resource
-from ..parsers import customer_get_parser
+from ..parsers import patients_search_get_parser
 
 
-class CustomerSearchResource(Resource):
+class PatientsSearchResource(Resource):
 
     def _get_results(self, query):
         names = current_app.search_engine(query.lower().strip())
         return [name.title() for name in names]
 
     def get(self):
-        args = customer_get_parser.parse_args()
+        args = patients_search_get_parser.parse_args()
         result = self._get_results(args.q)
         _return = {
             'query': args.q,

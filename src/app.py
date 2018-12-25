@@ -1,7 +1,7 @@
 from flask import Flask
 
 from autocomplete import get_tree
-from api import customer
+from api import patient
 
 def create_app(testing=False):
     app = Flask(__name__)
@@ -9,9 +9,7 @@ def create_app(testing=False):
     if testing:
         app.config['TESTING'] = True
 
-    app.register_blueprint(
-        customer.api_bp,
-        url_prefix=customer.CUSTOMER_PREFIX)
+    app.register_blueprint(patient.api_bp)
     
     app.search_engine = get_tree()
 
