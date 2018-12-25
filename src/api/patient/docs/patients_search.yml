@@ -1,0 +1,27 @@
+Retornará uma lista de Pacientes
+----
+tags:
+  - Autocomplete RESTApi
+parameters:
+  - in: query
+    name: q
+    type: string
+    required: true
+    description: Nome ou parte dele para ser pesquisado
+definitions:
+  PatientsSearch:
+    type: object
+    properties:
+      query:
+        type: string
+      patients:
+        type: array
+        items:
+            type: string
+      patients_count:
+        type: integer
+responses:
+  200:
+    description: Objeto com o query que foi enviada, os nomes encontrados e uma contagem dos nomes
+    schema:
+      $ref: '#/definitions/PatientsSearch'
