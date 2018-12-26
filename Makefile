@@ -7,6 +7,9 @@ runapp:
 runappd:
 	docker-compose up -d --remove-orphans autocomplete_restapi
 
+runapplocal:
+	python ./src/run.py
+
 runtests:
 	docker-compose up --remove-orphans autocomplete_restapi_test
 
@@ -15,3 +18,6 @@ runtestslocal:
 
 stop:
 	docker-compose down
+
+installdependencies:
+	pip install -r requirements.txt
