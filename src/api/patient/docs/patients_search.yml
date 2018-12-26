@@ -22,6 +22,6 @@ definitions:
         type: integer
 responses:
   200:
-    description: Objeto com o query que foi enviada, os nomes encontrados e uma contagem dos nomes
+    description: Objeto com a query que foi enviada, os nomes encontrados e uma contagem dos nomes
     schema:
       $ref: '#/definitions/PatientsSearch'
