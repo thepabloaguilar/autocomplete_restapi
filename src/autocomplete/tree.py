@@ -52,9 +52,6 @@ class TernaryTree:
         return None
     
     def __get_combinations_from_node(self, node, prefix='', words=['']):
-        if node.is_end_of_string and node.has_child():
-            words.append(words[-1])
-
         left = ['']
         if node.left is not None:
             left = self.__get_combinations_from_node(
@@ -71,6 +68,8 @@ class TernaryTree:
         
         words[-1] += prefix + node.character
         if node.equal is not None:
+            if node.is_end_of_string and node.has_child():
+                words.append(words[-1])
             words = self.__get_combinations_from_node(node.equal, words=words)
         
         final = left + right + words
@@ -82,8 +81,9 @@ class TernaryTree:
         # If node doesn't have the `equal` pointer, it'll receive a new
         # node with letter -> `word[0]`
         if node.equal is None:
-            if not is_end and node.character == word[0]:
-                self.__insert(node, word[1:])
+            if node.character == word[0]:
+                if not is_end:
+                    self.__insert(node, word[1:])
             else:
                 node.equal = TernaryNode(word[0], is_end)
                 if not is_end:
