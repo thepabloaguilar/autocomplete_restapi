@@ -7,10 +7,7 @@ class TernaryTree:
     
     def insert(self, value):
         value = value.replace('\n', '').strip()
-        if self.root is None:
-            self.root = TernaryNode(value[0])
-            value = value[1:]
-        self.__insert(self.root, value)
+        self.root = self.__insert(self.root, value)
 
     def search(self, word):
         '''
@@ -20,28 +17,33 @@ class TernaryTree:
             combinations, after that, will append the `word` as prefix in
             each combination found.
         '''
-        node = self.__get_node(self.root, word) if word else None
+        node = self.__get_node(self.root, word)
         if node:
-            default = []
-            if node.is_end_of_string:
-                default.append(word)
-            
-            if node.has_child():
+            _node = TernaryNode(node.character, node.is_end_of_string)
+            _node.equal = node.equal
+
+            if not word:
+                _node.left = node.left
+                _node.right = node.right
+            else:
+                word = word[:-1]
+
+            if _node.has_child():
                 combinations = self.__get_combinations_from_node(
-                                    node.equal, prefix='', words=[''])
-                return default + [word + item for item in combinations]
-            
-            return default
+                                        _node, prefix='', words=[''])
+                return [word + item for item in combinations]
         return []
     
     def __get_node(self, node, word):
         '''
-            While the last letter isn't reache, the function is called
+            While the last letter isn't reached, the function is called
             again until find the node with last letter.
             If doesn't find the node with expected letter,
             the function will return `None`.
         '''
-        if node.character == word[0]:
+        if not word:
+            return node
+        elif node.character == word[0]:
             if len(word) == 1:
                 return node
             return self.__get_node(node.equal, word[1:])
@@ -77,35 +79,22 @@ class TernaryTree:
 
     def __insert(self, node, word):
         is_end = len(word) == 1
-
-        # If node doesn't have the `equal` pointer, it'll receive a new
-        # node with letter -> `word[0]`
-        if node.equal is None:
-            if node.character == word[0]:
-                if not is_end:
-                    self.__insert(node, word[1:])
-            else:
-                node.equal = TernaryNode(word[0], is_end)
-                if not is_end:
-                    self.__insert(node.equal, word[1:])
+        if node is None:
+            node = TernaryNode(word[0], is_end)
+            if not is_end:
+                node.equal = self.__insert(node.equal, word[1:])
+            return node
         elif node.character == word[0]: # EQUAL
             if not is_end:
-                self.__insert(node.equal, word[1:])
-            if node.is_end_of_string == False:
-                node.is_end_of_string = is_end
+                node.equal = self.__insert(node.equal, word[1:])
+            node.is_end_of_string = is_end if not node.is_end_of_string else True
+            return node
         elif node.character > word[0]: # TO LEFT
-            if node.left is None:
-                node.left = TernaryNode(word[0], is_end)
-                word = word[1:]           
-            if not is_end:
-                self.__insert(node.left, word)
+            node.left = self.__insert(node.left, word)
+            return node
         elif node.character < word[0]: # TO RIGHT
-            if node.right is None:
-                node.right = TernaryNode(word[0], is_end)
-                word = word[1:]
-            
-            if not is_end:
-                self.__insert(node.right, word)
+            node.right = self.__insert(node.right, word)
+            return node
     
     def __call__(self, word):
         return self.search(word)

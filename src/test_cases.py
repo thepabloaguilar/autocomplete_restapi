@@ -13,12 +13,12 @@ class PatientSearchTest(TestCase):
     def test_empty_query(self):
         '''
         WHEN the `query` is empty
-        THEN the return should be an empty array for `patients` attribute,
-        and 0(zero) for `patients_count` attribute.
+        THEN the return should be an array with all patients' name in
+        `patients` attribute, and `patients` length
+        for `patients_count` attribute.
         '''
         response = self.client.get('patients/search?q=').json
-        expected_response = {'query': '', 'patients': [], 'patients_count': 0}
-        self.assertEqual(response, expected_response)
+        self.assertEqual(len(response['patients']), response['patients_count'])
     
     def test_non_query(self):
         '''
